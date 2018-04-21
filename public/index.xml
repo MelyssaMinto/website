@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Minto&#39;s Blog</title>
+    <link>/</link>
+    <description>Recent content on Minto&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    
+	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title></title>
+      <link>/monoincvignette/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/monoincvignette/</guid>
+      <description>MonoInc R Package code{white-space: pre;} div.sourceCode { overflow-x: auto; } table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode { margin: 0; padding: 0; vertical-align: baseline; border: none; } table.sourceCode { width: 100%; line-height: 100%; } td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; } td.sourceCode { padding-left: 5px; } code  span.kw { color: #007020; font-weight: bold; } /* Keyword */ code  span.dt { color: #902000; } /* DataType */ code  span.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>/contact/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/contact/</guid>
+      <description>msm110@duke.edu</description>
+    </item>
+    
+    <item>
+      <title>Bio</title>
+      <link>/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/about/</guid>
+      <description>I am a 1st year student in the Computational Biology and Bioinformatics PhD program at Duke University. I hold a B.S. in Biology and a B.S. in Mathematics from Meredith College. I am seeking to expand my computational and theoretical skills, as it relates to understanding the epigenome and gene regulation.
+My full CV is avalaible here.</description>
+    </item>
+    
+    <item>
+      <title>Press Mentions</title>
+      <link>/press/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/press/</guid>
+      <description> Meredith College Strong Story | 2017 Ford Foundation Honorable Mention | 2017  </description>
+    </item>
+    
+    <item>
+      <title>Projects</title>
+      <link>/code/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/code/</guid>
+      <description>Data Analysis MonoInc: This package imputes monotonic data | CRAN | Tutorial
+Github Projects
+ </description>
+    </item>
+    
+    <item>
+      <title>Publications</title>
+      <link>/papers/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/papers/</guid>
+      <description>Papers  Evaluating opportunities for advancing the use of alternative methods in risk assessment through the development of fit-for-purpose in vitro assays | 2018 | Toxicology in Vitro   Posters    img { border: 1px solid #ddd; border-radius: 4px; padding: 5px; width: 150px; } img:hover { box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5); }              Google Scholar</description>
+    </item>
+    
+  </channel>
+</rss>
