@@ -1,0 +1,296 @@
+---
+title: "Invasion of Privacy - A Data Science Approach"
+author: "Melyssa Minto"
+date: '`r format(Sys.Date(), "%B %d %Y")`'
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 3
+---
+
+### Motivation
+This work was inspired by [Julia Silge](https://twitter.com/juliasilge) and of course [Cardi B](https://twitter.com/iamcardib). Julia Silge recently came to Duke and gave a [#RLadies](https://twitter.com/hashtag/RLadies?src=hash) [#tidytext](https://twitter.com/hashtag/tidytext?src=hash) workshop, before this I have actively avoided the tidy principles because I was stuck in my old ways.
+
+<http>
+<center>
+![](https://j.gifs.com/PZ82GW.gif)
+</center>
+</http>
+
+
+But you wanna know something, it has been really fun learning the tidy principles and it has been exceptionally easy to follow. 
+
+
+**Keys to being tidy**
+
++ First thing's first, ```%>%``` is the pipe operator. At first, looking at "tidy" code with the pipe operator can make ```R``` look like a _whole_ other programming language. But once I understood that it was just piping through each step one line at a time, things started to clear up. 
+
++ Comment your code!!!
+<http>
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">“I comment my code as if at any moment I might get a traumatic brain injury”<a href="https://twitter.com/dataandme?ref_src=twsrc%5Etfw">@dataandme</a> at <a href="https://twitter.com/hashtag/rstatsnyc?src=hash&amp;ref_src=twsrc%5Etfw">#rstatsnyc</a></p>&mdash; David Robinson (@drob) <a href="https://twitter.com/drob/status/987795355659112453?ref_src=twsrc%5Etfw">April 21, 2018</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 
+</http>
+
++  For more information, please visit the [tidyverse](https://www.tidyverse.org) website, I am a newbie to this.
+
+
+```{r, message = FALSE, warning=FALSE, echo = FALSE}
+### Data Preprocessing
+require(tidytext)
+require(tidyverse) 
+require(readr)
+require(dplyr)
+require(purrr)
+require(reshape2)
+require(wordcloud)
+require(stm)
+require(quanteda)
+require(knitr)
+require(widyr)
+require(igraph)
+require(ggraph)
+
+setwd("~/Google Drive/CardiB/InvasionofPrivacy/")
+filepath <- list.files("~/Google Drive/CardiB/InvasionofPrivacy/", pattern="*.txt", full.names=TRUE)
+ldf <- lapply(filepath, function(x) read_delim(x,  "\t", escape_double = FALSE, trim_ws = TRUE, col_names = FALSE))
+```
+
+```{r, message = FALSE, echo = FALSE}
+#--tidy dataset
+#-Extract song names
+titles <- gsub("/Users/LabWork/Google Drive/CardiB/InvasionofPrivacy//", "", filepath)
+titles <- gsub("-", " ", titles)
+titles <- gsub(".txt", "", titles)
+#titles
+
+#-adding title and line number to each dataframe
+names(ldf)<-titles #name each element in list 
+ldf<-mapply(`[<-`, ldf, 'Title', value = titles, SIMPLIFY = FALSE) #add a title column in each dataframe
+ldf<-lapply(names(ldf), function(x) tibble::rowid_to_column(ldf[[x]], "line")) #add line number column
+
+#-put all songs in one datafame 
+full_album <- bind_rows(ldf)
+colnames(full_album)[2] <- "text"
+
+#-tidy it!
+tidy_album <- full_album %>%
+  unnest_tokens(word, text)
+
+#kable(head(tidy_album, n = 10))
+
+#Making a color pallete based on the album cover
+                   
+IoP_pallete<-c("#005473", # deepteal 
+               "#F4FCFF", # white
+               "#15152D", # black
+               "#4B556E", # blue-grey
+               "#5E0151", # purple
+               "#F3FC03", # yellow
+               "#885913", # brown
+               "#F388AA", # pink
+               "#EE0500", # red
+               "#2FA7BF", # teal
+               "#DEBA04", # golden
+               "#AEDEEC", # babyblue
+               "#E6AE8B") # tan
+```
+
+
+### Sentiment analysis
+#### What kinda vibe is the _Invasion of Privacy_ giving off?
+Here I used ```bing``` sentiments which classify if a word is positive or negative.
+```{r, message=FALSE, fig.align='center', echo=FALSE, warning = FALSE}
+tidy_album %>%
+  anti_join(stop_words) %>%
+  inner_join(get_sentiments("bing")) %>%
+  count(word, sentiment, sort = TRUE) %>%
+  acast(word ~ sentiment, value.var = "n", fill = 0) %>%
+  comparison.cloud(colors = IoP_pallete[c(1,8)],max.words = 300,title.size=1)
+```
+Using this classification, I looked to see what percent of each song was positive or negative. This analysis shows that _Best Life_, _I Like It_ are the top positive songs. I will have to agree that _Best Life_ and _I like It_ are overall positive, and _Best Life_ features [Chance The Rapper](https://twitter.com/chancetherapper), my all-time favorite artist, so it will always hold a special place in my heart.
+```{r, fig.align='center', fig.height=7, fig.width=12, message=FALSE, echo=FALSE, warning = FALSE}
+tidy_album %>%
+  anti_join(stop_words) %>%
+  inner_join(get_sentiments("bing")) %>%   # getting the subset of words that are in the bing sentiment and in the album
+  count(Title, word, sentiment, sort = TRUE) %>% # counting the number of positive and negative sentiments in each song
+  group_by(Title) %>%
+  mutate(proc = (n/sum(n) * 100)) %>%      #calcalating percent of positive and negative sentiments
+  ungroup %>%
+  ggplot(aes(factor(1), proc, fill = sentiment)) + #plotting 
+  geom_bar(width = 1, stat = "identity")+
+  scale_fill_manual(values=IoP_pallete[c(1,8)]) +
+  theme(panel.background = element_blank(), text = element_text(size=18)) +
+  coord_polar("y", start=0)+
+  facet_wrap(~Title) +
+  labs(x="", y="")
+```
+So then I look at the words that contribute to the positive and negative sentiments for those songs.
+
+```{r, message=FALSE, fig.align='center', echo=FALSE, warning = FALSE}
+tidy_album %>%
+  anti_join(stop_words) %>%
+  inner_join(get_sentiments("bing")) %>%   
+  count(Title, word, sentiment, sort = TRUE) %>%
+  filter(Title %in% c("I Like It", "Best Life", "Money Bag", "I Do")) %>%
+  group_by(Title) %>%
+  filter(row_number() <= 10)   %>%
+  ungroup() %>%
+  ggplot(aes(reorder(word,n), n, fill = sentiment)) +
+  geom_col(show.legend = FALSE) +
+  scale_fill_manual(values=IoP_pallete[c(1,8)]) +
+  facet_wrap(~Title, scales = "free_y", ncol = 2) +
+  theme(panel.background = element_blank()) +
+  labs(y = "Contribution to sentiment", x = NULL) +
+  coord_flip()
+  
+ 
+```
+
+Let's just take a moment to appreciate that "woo" is a positive word! Otherwise, I would think a better sentiment data set would better serve these songs, one specific to hip-hop music. 
+
+### tf-idf analysis 
+#### Soooo you haven't listened to the album yet...I will try and summarize each song
+
+
++ term frequency (tf) and inverse document frequency (idf) have been theorized to score words that best describe text
+$$ idf(term) = ln( \frac{n_{\text{documents}}}{n_{\text{douments containing term}}})$$
+
++ tf-idf is about comparing text within a collection, finds word that are most important in each document in a collection
+
+So let's see if this reigns true for the songs in the album. Naturally, the words that are most important to each song is the chorus which typically defines the song. 
+```{r, message=FALSE,fig.height=17 ,fig.width=15, fig.align='center', echo =FALSE, warning = FALSE, warning = FALSE}
+tidy_album %>%
+  count(Title, word, sort = TRUE) %>%
+  bind_tf_idf(word, Title, n) %>%
+  arrange(desc(tf_idf)) %>%
+  group_by(Title) %>% 
+  filter(row_number() <= 10)   %>%
+  ungroup %>%
+  ggplot(aes(fct_reorder(word, tf_idf), tf_idf, fill = Title)) +
+  geom_col(show.legend = FALSE) +
+  scale_fill_manual(values=IoP_pallete) +
+  labs(x = NULL, y = "tf-idf") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), text = element_text(size=18)) +
+  facet_wrap(~Title, ncol = 3, scales = "free") +
+  coord_flip()
+```
+
+If I took the words of the highest tf-idf score for each song, I wouldn't be able to recapitulate what the song was about. Perhaps, calculating the tf-idf scores on n grams would better characterize what the song was about.
+
+### Analyzing n-grams
+
+ 
+```{r,  message=FALSE,fig.height=17 ,fig.width=15, fig.align='center', echo=FALSE, warning = FALSE, eval=FALSE }
+full_album %>%
+  unnest_tokens(bigram, text, token = "ngrams", n=2) %>%
+  separate(bigram, c("word1", "word2"), sep = " " ) %>% #separate words
+  filter( !word1 %in% c("verse", "chorus"), # filter out "verse" and "chorus"
+          !word2 %in% c("verse", "chorus")) %>% # w
+  unite(bigram, word1, word2, sep = " ") %>% 
+  count(Title, bigram) %>%
+  bind_tf_idf(bigram, Title, n) %>%
+  arrange(desc(tf_idf)) %>%
+  group_by(Title) %>% 
+  filter(row_number() <= 10)   %>%
+  ungroup %>%
+  ggplot(aes(fct_reorder(bigram, tf_idf), tf_idf, fill = Title)) +
+  geom_col(show.legend = FALSE) +
+  scale_fill_manual(values=IoP_pallete) +
+  labs(x = NULL, y = "tf-idf") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), text = element_text(size=18)) +
+  facet_wrap(~Title, ncol = 3, scales = "free") +
+  coord_flip()
+
+
+
+```
+And here are the top trigrams for each song.
+```{r,  message=FALSE,fig.height=17 ,fig.width=15, fig.align='center', echo=FALSE, warning = FALSE}
+full_album %>%
+  unnest_tokens(trigram, text, token = "ngrams", n=3) %>%
+  separate(trigram, c("word1", "word2", "word3"), sep = " " ) %>% #separate words
+  filter( !word1 %in% c("verse", "chorus"), # filter out where word1 is not a stop word and 
+          !word2 %in% c("verse", "chorus"),
+          !word3 %in% c("verse", "chorus")) %>% # word2 is not a stop word
+  unite(trigram, word1, word2, word3, sep = " ") %>% 
+  count(Title, trigram) %>%
+  bind_tf_idf(trigram, Title, n) %>%
+  arrange(desc(tf_idf)) %>%
+  group_by(Title) %>% 
+  filter(row_number() <= 10)   %>%
+  ungroup %>%
+  ggplot(aes(fct_reorder(trigram, tf_idf), tf_idf, fill = Title)) +
+  geom_col(show.legend = FALSE) +
+  scale_fill_manual(values=IoP_pallete) +
+  labs(x = NULL, y = "tf-idf") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), text = element_text(size=18)) +
+  facet_wrap(~Title, ncol = 3, scales = "free") +
+  coord_flip()
+
+
+
+```
+
+I definitely think as n increases, it is easier to get a picture of what each song is about. The top trigrams of _Drip_, _Best Life_, _Get Up 10_ characterizes its respective song well. 
+
+#### Cardi B Phrases
+
+We all know Cardi B is known for her phrases, so I was curious to see what are some top phrases we can take from the album. 
+
+<http>
+<center>
+<iframe src="https://giphy.com/embed/3o751Yxe9UjX26BZbG" width="480" height="358" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+
+<iframe src="https://giphy.com/embed/12sHg8v0G84V20" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+
+<iframe src="https://giphy.com/embed/xUydljLrnX00Dm59dH" width="480" height="433" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+</center>
+</http>
+
+Below is a graph of bigrams throughout the album. Can anyone spot the next Cardi B catch phrase?
+```{r , message=FALSE, echo=FALSE, warning = FALSE}
+count_bigrams <- function(dataset) {
+  dataset %>%
+    unnest_tokens(bigram, text, token = "ngrams", n = 2) %>%
+    separate(bigram, c("word1", "word2"), sep = " ") %>%
+    filter(!word1 %in% c(stop_words$word, "verse", "chorus", "intro"),
+           !word2 %in% c(stop_words$word, "verse", "chorus", "intro")) %>%
+    count(word1, word2, sort = TRUE)
+}
+
+visualize_bigrams <- function(bigrams) {
+  set.seed(2016)
+  a <- grid::arrow(type = "closed", length = unit(.15, "inches"))
+  
+  bigrams %>%
+    graph_from_data_frame() %>%
+    ggraph(layout = "fr") +
+    geom_edge_link(aes(edge_alpha = n), show.legend = FALSE, arrow = a) +
+    geom_node_point(color = "lightblue", size = 5) +
+    geom_node_text(aes(label = name), vjust = 1, hjust = 1) +
+    theme_void()
+}
+
+library(stringr)
+
+bigrams <- full_album %>%
+  count_bigrams()
+
+# filter out rare combinations, as well as digits
+bigrams %>%
+  filter(n > 2,
+         !str_detect(word1, "\\d"),
+         !str_detect(word2, "\\d")) %>%
+  visualize_bigrams()
+```
+
+
+
+### Resources 
++ [Converting to and from Document-Term Matrix and Corpus objects](https://cran.r-project.org/web/packages/tidytext/vignettes/tidying_casting.html)
+
++ [Text Mining with R](https://www.tidytextmining.com)
+
++ [Topic modeling with R and tidy data principles](https://www.youtube.com/watch?v=evTuL-RcRpc)
+
++ [Tutorials for Text Mining Using Tidy Data Principles](https://github.com/juliasilge/tidytext-tutorial)
