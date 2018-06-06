@@ -16,7 +16,7 @@ To say this last year was difficult is a huge understatement.
 </center>
 </http>
 
-Coming from a small liberal arts college to a large R1 research institution was more than I bargained for. For as long as I can remember, I have always been one of the top students in my class. So when **EVERYONE** warned me that grad school would be hard, I thought to myself "I've made it through every other obstacle, I've got this". I, in-fact, did not have it. I severly underestimated the huge lifestyle change I was undergoing. As a more _Type-A_ person I LOVE strucure, I was used to structure. 
+Coming from a small liberal arts college to a large R1 research institution was more than I bargained for. For as long as I can remember, I have always been one of the top students in my class. So when **EVERYONE** warned me that grad school would be hard, I thought to myself "I've made it through every other obstacle, I've got this". I, in-fact, did not have it. I severely underestimated the huge lifestyle change I was undergoing. As a more _Type-A_ person I LOVE structure, I was used to structure. 
 
 <http>
 <center>
@@ -24,21 +24,21 @@ Coming from a small liberal arts college to a large R1 research institution was 
 </center>
 </http>
 
-So when there wasn't much structure and little guidance my first weeks in grad school, I was frustrated and felt hopeless! Grad school was not what I imagined it at all. So I am compling a list of things I wish I knew when I started:
+So when there wasn't much structure and little guidance my first weeks in grad school, I was frustrated and felt hopeless! Grad school was not what I imagined it at all. So I am compiling a list of things I wish I knew when I started:
 
-1. Every student has their own unique PhD journey that will largley be directed by themslef. So, from day 1 be sure to advocate for yourself and dont be afraid to suggest what courses and paths you believe is right for you. 
+1. Every student has their own unique PhD journey that will largely be directed by themselves. So, from day 1 be sure to advocate for yourself and don't be afraid to suggest what courses and paths you believe is right for you. 
 
-2. Having that being said, dont be afaid to push your boundaries. Make a list of goals and skills you want to learn during your PhD and plan your PhD around those goals. 
+2. Having said that, don't be afraid to push your boundaries. Make a list of goals and skills you want to learn during your PhD and plan your PhD around those goals. 
 
-3. If someone doesnt responds to an email, send it again..or show up at their office. You are your strongest advocate and no one is going to care more about your journey than you do. 
+3. If someone doesn't respond to an email, send it again..or show up at their office. You are your strongest advocate and no one is going to care more about your journey than you do. 
 
-4. Try and align yourself with opportunities for mentorship. It is important to have a baord or mentors to seek advice for personal and academic advice. Seek advice from faculty, senior students, and peers about how to navigate your specific program. 
+4. Try and align yourself with opportunities for mentor-ship. It is important to have a board of mentors to seek advice for personal and academic advice. Seek advice from faculty, senior students, and peers about how to navigate your specific program. 
 
 5. When choosing a lab PI, find out what's important to you. Do you need more emotional support, access to network, intellectual support? Do you want a lab that barely speaks to each other or very communal? If you're in a program like mine where you have to rotate through labs, try and choose diverse lab types to see which attributes you like and work well with. 
 
 6. Get involved! It is important to develop yourself outside of the lab, whether its joining organizations such as the [Black Graduate and Professional Students Association](https://dukegroups.com/organization/BGPSA) or an intramural sport. 
 
-After implementing these tips I was able to see more clearly see what my goals were and form an idea of how I was going to achieve them. I can say now that I have built up a commmunity at Duke filled with peers in and out of my program, I am seeking out more mentors, and I have joined a lab that I feel matches me well. 
+After implementing these tips I was able to see more clearly see what my goals were and form an idea of how I was going to achieve them. I can say now that I have built up a community at Duke filled with peers in and out of my program, I am seeking out more mentors, and I have joined a lab that I feel matches me well. 
 
 Oh, and also getting a puppy helped me throughout my first year as well :)
 **TIP**: Get a dog older than a year!!
