@@ -57,13 +57,13 @@ require(stringr)
 ```
 
 ```{r,message = FALSE, warning=FALSE, echo = FALSE}
-setwd("~/Google Drive/CardiB/InvasionofPrivacy/")
-filepath <- list.files("~/Google Drive/CardiB/InvasionofPrivacy/", pattern="*.txt", full.names=TRUE)
+setwd("~/Dropbox/blogfiles/CardiB/")
+filepath <- list.files("~/Dropbox/blogfiles/CardiB/InvasionofPrivacy/", pattern="*.txt", full.names=TRUE)
 ldf <- lapply(filepath, function(x) read_delim(x,  "\t", escape_double = FALSE, trim_ws = TRUE, col_names = FALSE))
 
 #--tidy dataset
 #-Extract song names
-titles <- gsub("/Users/LabWork/Google Drive/CardiB/InvasionofPrivacy//", "", filepath)
+titles <- gsub("/Users/LabWork/Dropbox/blogfiles/CardiB/InvasionofPrivacy//", "", filepath)
 titles <- gsub("-", " ", titles)
 titles <- gsub(".txt", "", titles)
 #titles
