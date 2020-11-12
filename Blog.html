@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+    <head>
+         <!-- Page Title -->
+        <title> Blog | MelyssaMinto.com </title>
+        <!-- meta data -->
+        <meta charset="UTF=8"> 
+        <meta name="description" content="Blog posts from Melyssa Minto">
+        <meta name="keywords", content="Blog, Graduate School, Life, PhD">
+        <meta name="author" , content="Melyssa Minto">
+        <meta name="viewport", content="width=device-width, initial-scale=1.0">
+
+        <!-- Style Sheet-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet", type="text/css", href="styles/styles.css">
+    </head>
+
+    <body>
+        <!-- Navigation Bar-->
+        <nav>
+            <div class="topnav" id="myTopnav">
+                <a href="index.html"> About </a> 
+                <a href="Projects.html"> Projects </a> 
+                <a href="Publications.html"> Publications </a>  
+                <a class="active_page", href="Blog.html"> Blog </a> 
+                <!-- <a href="Press.html"> Press </a>  -->
+                <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+                    <i class="fa fa-bars"></i>
+                  </a>
+            </div>
+        </nav>
+        <!-- Main -->
+        <main>
+            <h1> Check out my blog posts! </h1>
+            <div class="blog_card">
+
+                <div>
+                    <img src="assets/images/IMG_3997.JPG", alt="Blog Img">
+                    <h3> Jampacked Summer </h3>
+                    <p class="summary"> August is here The summer is coming to an end. The last two weeks have been extremely invirgoting
+                         and informational...</p>
+                    <a class="button" href="blog-posts/2018-08-01-summer2018.html"> Read More </a>
+                </div>
+
+                <div>
+                    <img src="assets/MelyssaMinto.jpg", alt="Blog Img">
+                    <h3> 1st Year at Duke </h3>
+                    <p class="summary"> To say this last year was difficult is a huge understatement. 
+                        Coming from a small liberal arts college to a large R1 research institution was more than I bargained for.                    </p>
+                    <a class="button" href="blog-posts/2018-06-06-finished-my-first-year-of-grad-school.html"> Read More </a>
+                </div>
+
+                <div>
+                    <img src="https://upload.wikimedia.org/wikipedia/en/9/97/Cardi_B_-_Invasion_of_Privacy.png", alt="Blog Img">
+                    <h3> Cardi </h3>
+                    <p class="summary"> Sentiment analysis for Cardi's Invasion of Privacy Album.
+                        This work was inspired by Julia Silge and of course Cardi B. Julia Silge recently ...
+                    </p>
+                    <a class="button" href="blog-posts/2018-04-23-invasion-of-privacy-a-data-science-approach.html"> Read More </a>
+                </div>
+
+            </div>
+
+            <h1></h1>
+
+            <div class="links" >
+                <div class="link_row">
+                    <div class="link_column">
+                        <a class=button id="cv" href="assets/Melyssa_Minto_resume.pdf"> CV </a>
+                    </div>
+    
+                    <div class="link_column">
+                        <a href="https://scholar.google.com/citations?user=4_3eFXcAAAAJ&hl=en">
+                            <img src="assets/icons/png-clipart-google-scholar-education-research-doctor-of-philosophy-scholar-s-logo-monochrome.png", alt="google scholar profile", align="center">
+                        </a>
+                    </div>
+    
+                    <div class="link_column">
+                        <a href="https://linkedin.com/in/melyssaminto">
+                            <img src="assets/icons/iconmonstr-linkedin-3.svg", alt="linkedin", align="center">
+                        </a>
+                    </div>
+    
+                    <div class="link_column">
+                        <a href="https://twitter.com/MelyssaMinto">
+                            <img src="assets/icons/iconmonstr-twitter-4.svg", alt="tweeter", align="center">
+                        </a>
+                    </div>
+    
+                    <div class="link_column">
+                        <a href="https://github.com/MelyssaMinto">
+                            <img src="assets/icons/iconmonstr-github-1.svg", alt="github", align="center">
+                        </a>
+                    </div>
+    
+                
+                </div>
+                </div>
+
+        </main>
+        <!-- JS Function to have a responsive nav-->
+        <script>
+            function myFunction() {
+              var x = document.getElementById("myTopnav");
+              if (x.className === "topnav") {
+                x.className += " responsive";
+              } else {
+                x.className = "topnav";
+              }
+            }
+        </script>
+    </body>
+</html>

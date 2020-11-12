@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+    <head>
+         <!-- Page Title -->
+        <title> Projects | MelyssaMinto.com </title>
+        <!-- meta data -->
+        <meta charset="UTF=8"> 
+        <meta name="description" content="Portfolio page about Melyssa Minto's Projects">
+        <meta name="keywords", content="R, Analysis, Genome, Epigenome, Morphometric, Crayfish, Sequencing">
+        <meta name="author" , content="Melyssa Minto">
+        <meta name="viewport", content="width=device-width, initial-scale=1.0">
+
+        <!-- Style Sheet-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet", type="text/css", href="styles/styles.css">
+    </head>
+
+    <body>
+        <!-- Navigation Bar-->
+        <nav>
+            <div class="topnav" id="myTopnav">
+                <a href="index.html"> About </a> 
+                <a class="active_page", href="Projects.html"> Projects </a> 
+                <a href="Publications.html"> Publications </a>  
+                <a href="Blog.html"> Blog </a> 
+                <!-- <a href="Press.html"> Press </a>  -->
+                <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+                    <i class="fa fa-bars"></i>
+                  </a>
+            </div>
+        </nav>
+
+        <!-- Main -->
+        <main>
+            <h1>  </h1>
+
+            <div class=project_card>
+                <!-- Analyzing PV and SST Interneurons-->
+                <div id=epht>
+                    <h3> NC Environmental Public Health Tracking </h3>
+                    <img src="assets/epht.png", alt="wireframe of NC EPHT portal">
+                    <p> 
+                      Project managed a DukeData+ program which introduces undergraduates to explore data.
+                      Much of the health of the general population is determined by several invisible factors. 
+                      The Data+ project team was tasked with piloting an environmental public health tracking tool for North Carolina  to 
+                      allow users to understand and visualize connections between social determinants, health measures (such as asthma rates 
+                      and heart attacks), and environmental measures (such as PM 2.5 concentration). 
+       
+
+                    </p>
+                </div>
+
+                <!-- Analyzing PV and SST Interneurons-->
+                <div id=pvsst>
+                    <h3>Analyzing PV and SST Interneurons </h3>
+                    <img src="assets/analysisPipeline.png", alt="Analysis Pipeline">
+                    <p> 
+                        Used various bioinformatic tools to assess ATAC-seq and RNA-seq data from Somatostatin and Parvilbumin Interneurons in the Nucleus Accumbens. 
+                        This included differential gene expression analysis of the RNA data, differential peak analysis of the ATAC data, and motif enrichemnt of the DA peaks in reference to the DE genes. 
+                        This revealed serveral transcription factors that were important in response to amphetamine in PV and SST cells. 
+                    </p>
+                </div>
+
+        
+                <!-- Crayfish-->
+                <div id=crayfish>
+                    <h3> Morphometric Crayfish species dilineation </h3>
+                    <img src="assets/crayfish.PNG", alt="Crayfish measurements">
+                    <p> 
+                        Crayfishes are considered one of the most imperiled groups of organisms in the U.S. 
+                        Effective conservation of these organisms is predicated on reliable identification of species which
+                        is a  substantial challenge faced in crayfish. Confident identification is often based on adult
+                        reproductive-form males, the presence of which is highly dependent on
+                        time of year. Our primary objective is to extend and automate a morphometric technique, i.e.,
+                        landmark analysis, to aid in reliable identification of crayfish species
+                        regardless of sex age and reproductive stage and which characters vary
+                        across space and environment irrespective of taxonomic group.
+                    </p>
+                </div>
+
+            </div>
+
+            <div>
+                
+            </div>
+
+            <h1></h1>
+
+            <div class="links" >
+                <div class="link_row">
+                    <div class="link_column">
+                        <a class=button id="cv" href="assets/Melyssa_Minto_resume.pdf"> CV </a>
+                    </div>
+    
+                    <div class="link_column">
+                        <a href="https://scholar.google.com/citations?user=4_3eFXcAAAAJ&hl=en">
+                            <img src="assets/icons/png-clipart-google-scholar-education-research-doctor-of-philosophy-scholar-s-logo-monochrome.png", alt="google scholar profile", align="center">
+                        </a>
+                    </div>
+    
+                    <div class="link_column">
+                        <a href="https://linkedin.com/in/melyssaminto">
+                            <img src="assets/icons/iconmonstr-linkedin-3.svg", alt="linkedin", align="center">
+                        </a>
+                    </div>
+    
+                    <div class="link_column">
+                        <a href="https://twitter.com/MelyssaMinto">
+                            <img src="assets/icons/iconmonstr-twitter-4.svg", alt="tweeter", align="center">
+                        </a>
+                    </div>
+    
+                    <div class="link_column">
+                        <a href="https://github.com/MelyssaMinto">
+                            <img src="assets/icons/iconmonstr-github-1.svg", alt="github", align="center">
+                        </a>
+                    </div>
+    
+                
+                </div>
+                </div>
+             
+                
+
+            
+        </main>
+
+         <!-- JS Function to have a responsive nav-->
+         <script>
+            function myFunction() {
+              var x = document.getElementById("myTopnav");
+              if (x.className === "topnav") {
+                x.className += " responsive";
+              } else {
+                x.className = "topnav";
+              }
+            }
+        </script>
+
+    </body>
+</html>

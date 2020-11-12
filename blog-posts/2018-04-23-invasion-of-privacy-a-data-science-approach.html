@@ -1,0 +1,206 @@
+<!-- ---
+title: Invasion of Privacy - A Data Science Approach
+author: Melyssa Minto
+date: '2018-04-23'
+slug: invasion-of-privacy-a-data-science-approach
+categories: [R]
+tags: [tidytext, tidyR, CardiB]
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 3
+--- -->
+
+
+
+<div id="motivation" class="section level3">
+<h3>Motivation</h3>
+<p>This work was inspired by <a href="https://twitter.com/juliasilge">Julia Silge</a> and of course <a href="https://twitter.com/iamcardib">Cardi B</a>. Julia Silge recently came to Duke and gave a <a href="https://twitter.com/hashtag/RLadies?src=hash">#RLadies</a> <a href="https://twitter.com/hashtag/tidytext?src=hash">#tidytext</a> workshop, before this I have actively avoided the tidy principles because I was stuck in my old ways.</p>
+<http>
+<center>
+<img src="https://j.gifs.com/PZ82GW.gif" />
+</center>
+<p></http></p>
+<p>But you wanna know something, it has been really fun learning the tidy principles and exceptionally easy to follow.</p>
+<p><strong>Keys to being tidy</strong></p>
+<ul>
+<li><p>First thing’s first, <code>%&gt;%</code> is the pipe operator. At first, looking at “tidy” code with the pipe operator can make <code>R</code> look like a <em>whole</em> other programming language. But once I understood that it was just piping through each step one line at a time, things started to clear up.</p></li>
+<li>Comment your code!!! <http>
+<blockquote class="twitter-tweet" data-lang="en">
+<p lang="en" dir="ltr">
+“I comment my code as if at any moment I might get a traumatic brain injury”<a href="https://twitter.com/dataandme?ref_src=twsrc%5Etfw"><span class="citation">@dataandme</span></a> at <a href="https://twitter.com/hashtag/rstatsnyc?src=hash&amp;ref_src=twsrc%5Etfw">#rstatsnyc</a>
+</p>
+— David Robinson (<span class="citation">@drob</span>) <a href="https://twitter.com/drob/status/987795355659112453?ref_src=twsrc%5Etfw">April 21, 2018</a>
+</blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<p></http></p></li>
+<li><p>For more information, please visit the <a href="https://www.tidyverse.org">tidyverse</a> website, I am a newbie to this.</p></li>
+</ul>
+<pre class="r"><code>#ldf is a list of dataframes and each dataframe represents a song on the album
+ldf&lt;-mapply(`[&lt;-`, ldf, &#39;Title&#39;, value = titles, SIMPLIFY = FALSE) #add a title column in each dataframe in list
+ldf&lt;-lapply(names(ldf), function(x) tibble::rowid_to_column(ldf[[x]], &quot;line&quot;)) #add line number column
+
+#-put all songs in one datafame 
+full_album &lt;- bind_rows(ldf) 
+colnames(full_album)[2] &lt;- &quot;text&quot;
+
+#-tidy it!
+tidy_album &lt;- full_album %&gt;%
+  unnest_tokens(word, text)</code></pre>
+</div>
+<div id="sentiment-analysis" class="section level3">
+<h3>Sentiment analysis</h3>
+<div id="what-kinda-vibe-is-cardi-bs-album-invasion-of-privacy-giving-off" class="section level4">
+<h4>What kinda vibe is Cardi B’s album <em>Invasion of Privacy</em> giving off?</h4>
+<p>Here I used <code>bing</code> sentiments which classify if a word is positive or negative.</p>
+<p><img src="2018-04-23-invasion-of-privacy-a-data-science-approach_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Using this classification, I looked to see what percent of each song was positive or negative. This analysis shows that <em>Best Life</em>, <em>I Like It</em> , <em>Money Bag</em>, <em>I Do</em> are the top positive songs. I will have to agree that <em>Best Life</em> and <em>I like It</em> are overall positive, and <em>Best Life</em> features <a href="https://twitter.com/chancetherapper">Chance The Rapper</a>, my all-time favorite artist, so it will always hold a special place in my heart.</p>
+<pre class="r"><code>album_sentiment&lt;-tidy_album %&gt;%
+  anti_join(stop_words) %&gt;%
+  inner_join(get_sentiments(&quot;bing&quot;)) %&gt;%   # getting the subset of words that are in the bing sentiment and in the album
+  count(Title, word, sentiment, sort = TRUE) %&gt;% # counting the number of positive and negative sentiments in each song
+  group_by(Title) %&gt;%
+  mutate(proc = (n/sum(n) * 100)) %&gt;%      #calcalating percent of positive and negative sentiments
+  ungroup </code></pre>
+<http>
+<center>
+<img src="2018-04-23-invasion-of-privacy-a-data-science-approach_files/figure-html/unnamed-chunk-6-1.png" width="1152" />
+</center>
+<p></http></p>
+<p>I was curious to see what words from those songs made it “positive”.</p>
+<pre class="r"><code>album_pos&lt;-album_sentiment %&gt;%
+  filter(Title %in% c(&quot;I Like It&quot;, &quot;Best Life&quot;, &quot;Money Bag&quot;, &quot;I Do&quot;)) %&gt;% #subsetting the four songs
+  group_by(Title) %&gt;%
+  filter(row_number() &lt;= 10)   %&gt;% #get top 10 sentiments for each song
+  ungroup() </code></pre>
+<p><img src="2018-04-23-invasion-of-privacy-a-data-science-approach_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Let’s just take a moment to appreciate that “woo” is a positive word! Otherwise, I would think a better sentiment data set would better serve these songs, one specific to hip-hop music.</p>
+</div>
+</div>
+<div id="tf-idf-analysis" class="section level3">
+<h3>tf-idf analysis</h3>
+<div id="soooo-you-havent-listened-to-the-album-yeti-will-try-and-summarize-each-song" class="section level4">
+<h4>Soooo you haven’t listened to the album yet…I will try and summarize each song</h4>
+<ul>
+<li><p>term frequency (tf) and inverse document frequency (idf) have been theorized to score words that best describe text <span class="math display">\[ idf(term) = ln( \frac{n_{\text{documents}}}{n_{\text{douments containing term}}})\]</span></p></li>
+<li><p>tf-idf is about comparing text within a collection, finds word that are most important in each document in a collection</p></li>
+</ul>
+<p>So let’s see if this reigns true for the songs in the album. Naturally, the words that are most important to each song is the chorus which typically defines the song.</p>
+<pre class="r"><code>album_tf_idf&lt;-tidy_album %&gt;% 
+  count(Title, word, sort = TRUE) %&gt;% #count the words
+  bind_tf_idf(word, Title, n) %&gt;% #calculate tf_idf score
+  arrange(desc(tf_idf)) %&gt;% #sort by tf_idf
+  group_by(Title) %&gt;% 
+  filter(row_number() &lt;= 10)   %&gt;% #get the top 10 tf_idf for each song
+  ungroup </code></pre>
+<p><img src="2018-04-23-invasion-of-privacy-a-data-science-approach_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>If I took the words of the highest tf-idf score for each song, I wouldn’t be able to recapitulate what the song was about. Perhaps, calculating the tf-idf scores on n grams would better characterize what the song was about.</p>
+</div>
+</div>
+<div id="analyzing-n-grams" class="section level3">
+<h3>Analyzing n-grams</h3>
+<p>Here are the top trigrams for each song.</p>
+<pre class="r"><code>trigram_album&lt;-full_album %&gt;%
+  unnest_tokens(trigram, text, token = &quot;ngrams&quot;, n=3) %&gt;%
+  separate(trigram, c(&quot;word1&quot;, &quot;word2&quot;, &quot;word3&quot;), sep = &quot; &quot; ) %&gt;% #separate words
+  filter( !word1 %in% c(&quot;verse&quot;, &quot;chorus&quot;, &quot;intro&quot;), # filter out &quot;verse&quot;, &quot;chorus&quot;, and &quot;intro&quot;
+          !word2 %in% c(&quot;verse&quot;, &quot;chorus&quot;, &quot;intro&quot;),
+          !word3 %in% c(&quot;verse&quot;, &quot;chorus&quot;, &quot;intro&quot;)) %&gt;% 
+  unite(trigram, word1, word2, word3, sep = &quot; &quot;) %&gt;%  # join words
+  count(Title, trigram) %&gt;% # counting the trigrams
+  bind_tf_idf(trigram, Title, n) %&gt;% # calculate tf_idf for the trigrams
+  arrange(desc(tf_idf)) %&gt;% # sort by tf_idf
+  group_by(Title) %&gt;% 
+  filter(row_number() &lt;= 10)   %&gt;% #get the top 10 for each song
+  ungroup</code></pre>
+<p><img src="2018-04-23-invasion-of-privacy-a-data-science-approach_files/figure-html/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>I definitely think as n increases, it is easier to get a picture of what each song is about. The top trigrams of <em>Drip</em>, <em>Best Life</em>, <em>Get Up 10</em> characterizes its respective song well.</p>
+<div id="cardi-b-phrases" class="section level4">
+<h4>Cardi B Phrases</h4>
+<p>We all know Cardi B is known for her phrases, so I was curious to see what are some top phrases we can take from the album.</p>
+<http>
+<center>
+<iframe src="https://giphy.com/embed/3o751Yxe9UjX26BZbG" width="480" height="358" frameBorder="0" class="giphy-embed" allowFullScreen>
+</iframe>
+<iframe src="https://giphy.com/embed/12sHg8v0G84V20" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen>
+</iframe>
+<iframe src="https://giphy.com/embed/xUydljLrnX00Dm59dH" width="480" height="433" frameBorder="0" class="giphy-embed" allowFullScreen>
+</iframe>
+</center>
+<p></http></p>
+<p>Below is a graph of bigrams throughout the album. <img src="/post/2018-04-23-invasion-of-privacy-a-data-science-approach_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<html>
+<div id="qp_all1939111" style="width:100%;">
+<link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<STYLE>#qp_main1939111 .qp_btna:hover input {background:#00355F!important} #qp_all1939111 {max-width:815px; margin:0 auto;}
+</STYLE>
+<div id="qp_main1939111" fp="e6Df47D6-53" results="0" cmt="0" style="border-radius:0px;margin:0 auto;padding:0.8em;background-color:#FFF;font-family: &#39;Open Sans&#39;, sans-serif, Arial;color:#000;border: 1px solid #DBD9D9;max-width:815px;box-sizing:border-box">
+<div style="font-size:1.2em;background-color:#00355F;color:#FFF;font-family:&#39;Open Sans&#39;, sans-serif, Arial">
+<div style="padding:0.8em;line-height:1.3em">
+Can anyone spot the next Cardi B catch phrase?
+</div>
+</div>
+<form id="qp_form1939111" action="//www.poll-maker.com/results1939111xe6Df47D6-53" method="post" target="_blank" style="display:inline;margin:0px;padding:0px">
+<div style="padding:0px">
+<input type=hidden name="qp_d1939111" value="43214.5190740794-43214.5190824753">
+<div class="qp_a" style="display:block;color:#6B6B6B;font-family: &#39;Open Sans&#39;, sans-serif, Arial;font-size:1.1em;line-height:1.5;padding:13px 8px 11px;margin:10px 0px;clear:both" onclick="var c=this.getElementsByTagName(&#39;INPUT&#39;)[0]; if((!event.target?event.srcElement:event.target).tagName!=&#39;INPUT&#39;){c.checked=(c.type==&#39;radio&#39;?true:!c.checked)};var i=this.parentNode.parentNode.parentNode.getElementsByTagName(&#39;INPUT&#39;);for(var k=0;k!=i.length;k=k+1){i[k].parentNode.parentNode.setAttribute(&#39;sel&#39;,i[k].checked?1:0)}">
+<span style="display:block;padding-left:30px;cursor:inherit"><input style="float:left;width:20px;margin-left:-25px;margin-top:2px;padding:0px;height:20px;-webkit-appearance:radio;" name="qp_v1939111" type="radio" value="1" />#FerrariFridays</span>
+</div>
+<div class="qp_a" style="display:block;color:#6B6B6B;font-family: &#39;Open Sans&#39;, sans-serif, Arial;font-size:1.1em;line-height:1.5;padding:13px 8px 11px;margin:10px 0px;clear:both" onclick="var c=this.getElementsByTagName(&#39;INPUT&#39;)[0]; if((!event.target?event.srcElement:event.target).tagName!=&#39;INPUT&#39;){c.checked=(c.type==&#39;radio&#39;?true:!c.checked)};var i=this.parentNode.parentNode.parentNode.getElementsByTagName(&#39;INPUT&#39;);for(var k=0;k!=i.length;k=k+1){i[k].parentNode.parentNode.setAttribute(&#39;sel&#39;,i[k].checked?1:0)}">
+<span style="display:block;padding-left:30px;cursor:inherit"><input style="float:left;width:20px;margin-left:-25px;margin-top:2px;padding:0px;height:20px;-webkit-appearance:radio;" name="qp_v1939111" type="radio" value="2" />#BadBunny</span>
+</div>
+<div class="qp_a" style="display:block;color:#6B6B6B;font-family: &#39;Open Sans&#39;, sans-serif, Arial;font-size:1.1em;line-height:1.5;padding:13px 8px 11px;margin:10px 0px;clear:both" onclick="var c=this.getElementsByTagName(&#39;INPUT&#39;)[0]; if((!event.target?event.srcElement:event.target).tagName!=&#39;INPUT&#39;){c.checked=(c.type==&#39;radio&#39;?true:!c.checked)};var i=this.parentNode.parentNode.parentNode.getElementsByTagName(&#39;INPUT&#39;);for(var k=0;k!=i.length;k=k+1){i[k].parentNode.parentNode.setAttribute(&#39;sel&#39;,i[k].checked?1:0)}">
+<span style="display:block;padding-left:30px;cursor:inherit"><input style="float:left;width:20px;margin-left:-25px;margin-top:2px;padding:0px;height:20px;-webkit-appearance:radio;" name="qp_v1939111" type="radio" value="3" />#MoneyMoves</span>
+</div>
+<div class="qp_a" style="display:block;color:#6B6B6B;font-family: &#39;Open Sans&#39;, sans-serif, Arial;font-size:1.1em;line-height:1.5;padding:13px 8px 11px;margin:10px 0px;clear:both" onclick="var c=this.getElementsByTagName(&#39;INPUT&#39;)[0]; if((!event.target?event.srcElement:event.target).tagName!=&#39;INPUT&#39;){c.checked=(c.type==&#39;radio&#39;?true:!c.checked)};var i=this.parentNode.parentNode.parentNode.getElementsByTagName(&#39;INPUT&#39;);for(var k=0;k!=i.length;k=k+1){i[k].parentNode.parentNode.setAttribute(&#39;sel&#39;,i[k].checked?1:0)}">
+<span style="display:block;padding-left:30px;cursor:inherit"><input style="float:left;width:20px;margin-left:-25px;margin-top:2px;padding:0px;height:20px;-webkit-appearance:radio;" name="qp_v1939111" type="radio" value="4" />Nothing will beat #Okuurrrr</span>
+</div>
+</div>
+<div style="padding-left:0px;clear:both;text-align:left;margin:1em auto">
+<a style="display:inline-block;box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;-ms-box-sizing:border-box;-o-box-sizing:border-box;padding-right:5px;text-decoration:none" class="qp_btna" href="#"><input name="qp_b1939111" style="min-width:7.8em;padding:0.5em;background-color:#0B79D3;font-family: 'Open Sans', sans-serif, Arial;font-size:16px;color:#FFF;cursor:pointer;cursor:hand;border:0px;-webkit-appearance:none;border-radius:0px" type="submit" btype="v" value="Vote" /></a><a style="display:inline-block;box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;-ms-box-sizing:border-box;-o-box-sizing:border-box;padding-left:5px;text-decoration:none" class="qp_btna" href="#"><input name="qp_b1939111" style="min-width:7.8em;padding:0.5em;background-color:#0B79D3;font-family: 'Open Sans', sans-serif, Arial;font-size:16px;color:#FFF;cursor:pointer;cursor:hand;border:0px;-webkit-appearance:none;border-radius:0px" type="submit" btype="r" value="Results" /></a>
+</div>
+</form>
+<div style="display:none">
+<div id="qp_rp1939111" style="font-size:14px;width:5ex;text-align:right;overflow:hidden;position:absolute;right:5px;height:1.5em;line-height:1.5em">
+
+</div>
+<div id="qp_rv1939111" style="font-size:14px;line-height:1.5em;width:0%;text-align:right;color:#FFF;box-sizing:border-box;padding-right:3px">
+
+</div>
+<div id="qp_rb1939111" style="font-size:14px;line-height:1.5em;color:#FFFFFF;display:block;padding-right:10px 5px">
+
+</div>
+<div id="qp_rva1939111" style="background:#006FB9;border-color:#006FB9">
+
+</div>
+<div id="qp_rvb1939111" style="background:#163463;border-color:#163463">
+
+</div>
+<div id="qp_rvc1939111" style="background:#5BCFFC;border-color:#1481AB">
+
+</div>
+</div>
+</div>
+<div style="text-align:center; margin:5px;">
+Created with <a id="qp_foot1939111" href="http://pollmaker.vote/e/RHEMFLE6">Survey Maker</a>
+</div>
+</div>
+<script src="//scripts.poll-maker.com/3012/scpolls.js" language="javascript"></script>
+</html>
+<p>I can’t wait till I’m making <strong><em>money moves</em></strong> and make a <strong><em>couple m’s</em></strong> … I’m not sure if I will be buying <strong><em>red bottoms</em></strong> or a <strong><em>versace driveway</em></strong> but I’m definitely okay with <strong><em>ferrari fridays</em></strong>.</p>
+</div>
+</div>
+<div id="summary" class="section level3">
+<h3>Summary</h3>
+<p>Using tidy principles definitely made my code look and feel more neat and debugging was a lot easier. I will be incorporating tidy principles more in my day to day work. As for text mining and analysis, this was my first jab at it and I had a lot of fun with this. I think a better sentiment dataset that is catered to Rap/Hip-Hop music would have made the sentiment analysis more accurate. Thank you for reading my first blog post…now back to <a href="https://twitter.com/hashtag/phdlife?src=hash&amp;lang=en">#PhDLife</a>.</p>
+</div>
+<div id="resources" class="section level3">
+<h3>Resources</h3>
+<ul>
+<li><p><a href="https://cran.r-project.org/web/packages/tidytext/vignettes/tidying_casting.html">Converting to and from Document-Term Matrix and Corpus objects</a></p></li>
+<li><p><a href="https://www.tidytextmining.com">Text Mining with R</a></p></li>
+<li><p><a href="https://www.youtube.com/watch?v=evTuL-RcRpc">Topic modeling with R and tidy data principles</a></p></li>
+<li><p><a href="https://github.com/juliasilge/tidytext-tutorial">Tutorials for Text Mining Using Tidy Data Principles</a></p></li>
+</ul>
+</div>
