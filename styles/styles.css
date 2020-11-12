@@ -308,13 +308,12 @@ p.summary {
 
   }
   .slide {
-    width: 300px;
+    width: 400px;
     flex-shrink: 0;
     height: 490px;
     padding: 10px 10px;
   }
   
-
 
 
 /* starting media queries*/
