@@ -13,25 +13,29 @@
         <!-- Style Sheet-->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet", type="text/css", href="styles/styles.css">
+
+        <script src="nav.js"></script>
+
     </head>
 
     <body>
         <!-- Navigation Bar-->
         <nav>
+        
             <div class="topnav" id="myTopnav">
-                <a href="index.html"> About </a> 
-                <a href="Projects.html"> Projects </a> 
-                <a href="Publications.html"> Publications </a>  
-                <a class="active_page", href="Blog.html"> Blog </a> 
+                <a class="active_page", href="index.html"> About </a> 
+                <a href="Portfolio.html"> Portfolio </a> 
+                <a href="Blog.html"> Blog </a> 
                 <!-- <a href="Press.html"> Press </a>  -->
                 <a href="javascript:void(0);" class="icon" onclick="myFunction()">
                     <i class="fa fa-bars"></i>
-                  </a>
+                    </a>
             </div>
-        </nav>
+         </nav>
+    
         <!-- Main -->
         <main>
-            <h1> Check out my blog posts! </h1>
+            <h1> digital notes </h1>
             <div class="blog_card">
 
                 <div>
@@ -53,21 +57,21 @@
                 </div>
 
 
-                <div>
+                <!-- <div>
                     <img src="assets/images/IMG_3997.JPG", alt="Blog Img">
                     <h3> Jampacked Summer </h3>
                     <p class="summary"> August is here The summer is coming to an end. The last two weeks have been extremely invirgoting
                          and informational...</p>
                     <a class="button" href="blog-posts/2018-08-01-summer2018.html"> Read More </a>
-                </div>
+                </div> -->
 
-                <div>
+                <!-- <div>
                     <img src="assets/MelyssaMinto.jpg", alt="Blog Img">
                     <h3> 1st Year at Duke </h3>
                     <p class="summary"> To say this last year was difficult is a huge understatement. 
                         Coming from a small liberal arts college to a large R1 research institution was more than I bargained for.                    </p>
                     <a class="button" href="blog-posts/2018-06-06-finished-my-first-year-of-grad-school.html"> Read More </a>
-                </div>
+                </div> -->
 
                 <div>
                     <img src="https://upload.wikimedia.org/wikipedia/en/9/97/Cardi_B_-_Invasion_of_Privacy.png", alt="Blog Img">
@@ -84,51 +88,53 @@
 
             <h1></h1>
 
-            <div class="links" >
-                <div class="link_row">
-                    <div class="link_column">
-                        <a class=button id="cv" href="assets/Melyssa_Minto_resume.pdf"> CV </a>
-                    </div>
+              <!-- Footer -->
+              <footer>
+                <div class="links" >
+                  <div class="link_row">
+                      <!-- <div class="link_column">
+                          <a class=button id="cv" href="assets/Melyssa_Minto_resume.pdf"> CV </a>
+                          <img src="assets/icons/icons8-cv-50.png", alt="google scholar profile", align="center">
+              
+                      </div> -->
+              
+                      <div class="link_column">
+                          <a href="https://scholar.google.com/citations?user=4_3eFXcAAAAJ&hl=en">
+                              <img src="assets/icons/icons8-google-scholar.svg", alt="google scholar profile", align="center">
+                          </a>
+                      </div>
+              
+                      <div class="link_column">
+                          <a href="https://linkedin.com/in/melyssaminto">
+                              <img src="assets/icons/icons8-linkedin-circled-50.png", alt="linkedin", align="center">
+                          </a>
+                      </div>
+              
+                      <div class="link_column">
+                          <a href="https://twitter.com/MelyssaMinto">
+                              <img src="assets/icons/icons8-twitter-circled.svg", alt="tweeter", align="center">
+                          </a>
+                      </div>
+              
+                      <div class="link_column">
+                          <a href="https://github.com/MelyssaMinto">
+                              <img src="assets/icons/icons8-github.svg", alt="github", align="center">
+                          </a>
+                      </div>
+              
+                      <div class="link_column">
+                          <a href="https://orcid.org/0000-0002-5438-7285">
+                              <img src="assets/icons/icons8-orcid.svg", alt="OrcID", align="center">
+                          </a>
+                      </div>
+              
+                  
+                  </div>
+              </div>
     
-                    <div class="link_column">
-                        <a href="https://scholar.google.com/citations?user=4_3eFXcAAAAJ&hl=en">
-                            <img src="assets/icons/png-clipart-google-scholar-education-research-doctor-of-philosophy-scholar-s-logo-monochrome.png", alt="google scholar profile", align="center">
-                        </a>
-                    </div>
-    
-                    <div class="link_column">
-                        <a href="https://linkedin.com/in/melyssaminto">
-                            <img src="assets/icons/iconmonstr-linkedin-3.svg", alt="linkedin", align="center">
-                        </a>
-                    </div>
-    
-                    <div class="link_column">
-                        <a href="https://twitter.com/MelyssaMinto">
-                            <img src="assets/icons/iconmonstr-twitter-4.svg", alt="tweeter", align="center">
-                        </a>
-                    </div>
-    
-                    <div class="link_column">
-                        <a href="https://github.com/MelyssaMinto">
-                            <img src="assets/icons/iconmonstr-github-1.svg", alt="github", align="center">
-                        </a>
-                    </div>
-    
-                
-                </div>
-                </div>
-
+              </footer>
+              
         </main>
-        <!-- JS Function to have a responsive nav-->
-        <script>
-            function myFunction() {
-              var x = document.getElementById("myTopnav");
-              if (x.className === "topnav") {
-                x.className += " responsive";
-              } else {
-                x.className = "topnav";
-              }
-            }
-        </script>
+
     </body>
 </html>
